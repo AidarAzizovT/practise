@@ -26,7 +26,7 @@ def is_empty(data_frame_object):
     # + doctest
     foundEmpty = False
 
-    for i in [3, 2, 1]: # использовать генератор списков
+    for i in [3, 2, 1]: # просто пройтись по всем 3м столбцам начиная со второго
         filling = data_frame_object[f"Y-{i}"].to_list() # заменить f"Y-{i}" на года
 
         for j in range(6):
