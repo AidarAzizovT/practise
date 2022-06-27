@@ -1,4 +1,7 @@
 import pandas
+import numpy as np
+
+
 
 CORRECT_TITLES = ['ВТП Казани, млн руб.', 'Добавленная стоимость, тыс. руб.',
                   'ДС Обрабатывающие производства, тыс. руб.', 'ДС Строительство, тыс. руб.',
@@ -13,22 +16,48 @@ def is_titles_ok(data_frame_object):
         return False
 
 def is_empty(data_frame_object):
+
     foundEmpty = False
     for i in [3, 2, 1]:
         filling = data_frame_object[f"Y-{i}"].to_list()
         for j in range(6):
-            if filling[j] == "None":
-                foundEmpty = True
-    if foundEmpty == True:
-        return True
-    else:
-        return False
+            if pandas.DataFrame(filling).isnull()[0][j] == True:
+                return True
+    return False
 
-def check_table():
-    data_frame_object = pandas.read_excel("exmaple.xlsx")
+
+def check_table(file_name):
+    """
+    >>> check_table("correct1.xlsx")
+    'Everything is fine!'
+
+    >>> check_table("correct2.xlsx")
+    'Everything is fine!'
+
+    >>> check_table("wrong1.xlsx")
+    'Something is not correct'
+
+    >>> check_table("wrong2.xlsx")
+    'Something is not correct'
+
+    >>> check_table("wrong3.xlsx")
+    'Something is not correct'
+
+    """
+    data_frame_object = pandas.read_excel(file_name)
     if is_titles_ok(data_frame_object) and not is_empty(data_frame_object):
-        print("Everything is fine!")
+        return 'Everything is fine!'
     else:
-        print("Something is not correct")
+        return 'Something is not correct'
 
-check_table()
+
+#print(check_table("wrong2.xlsx"))
+
+
+
+
+if __name__ == "__main__":
+    import doctest
+    doctest.testmod()
+
+
