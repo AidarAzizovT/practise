@@ -9,7 +9,7 @@ CORRECT_TITLES = ['ВТП Казани, млн руб.', 'Добавленная
 def are_titles_ok(data_frame_object: pandas.DataFrame) -> bool:
     '''
     This function checks titles, are they correct or not. If there are
-    mistake with it, function returns False and print
+    mistakes with it, function returns False and prints
     where  this mistakes are. If everything is correct,
     function returns True.
 
@@ -44,7 +44,7 @@ def are_titles_ok(data_frame_object: pandas.DataFrame) -> bool:
 def is_empty(data_frame_object: pandas.DataFrame) -> bool:
     '''
         Function checks filling of DF object, if there
-        are missing data, function returns True and print
+        are missing data, function returns True and prints
         where this mistake are. Else, if there aren't
         any problems, function returns False.
 
