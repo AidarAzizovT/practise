@@ -27,8 +27,8 @@ def is_titles_ok(data_frame_object: pandas.DataFrame) -> bool:
         True
     '''
     foundMistake = False
-    counter = 2  # Параметры начинаются со 2 строчке в excel
-    for index_tt, title in enumerate(data_frame_object.values):
+    counter = 2  # Параметры начинаются со 2 строчке в excel TO delete
+    for index_tt, title in enumerate(data_frame_object.values): # user one letter for index, for example, i
         if title[0] not in CORRECT_TITLES:
             print(f'С параметром на {index_tt + 2} строке ошибка')
             foundMistake = True
@@ -37,6 +37,8 @@ def is_titles_ok(data_frame_object: pandas.DataFrame) -> bool:
 
 def is_empty(data_frame_object: pandas.DataFrame) -> bool:
     '''
+        Проверка на отсутствие данных
+
         >>> df = pandas.read_excel('correct1.xlsx')
         >>> is_empty(df)
         False
@@ -55,13 +57,14 @@ def is_empty(data_frame_object: pandas.DataFrame) -> bool:
         True
 
     '''
-
     found_empty = False
+
     for string in data_frame_object.values:
-        for el_index, element in enumerate(string[1:]):
+        for i, element in enumerate(string[1:]):
             if pandas.isna(element):
                 found_empty = True
-                print(f"Ошибка в значении  {string[0]} за  {data_frame_object.columns[el_index + 1]} год")
+                print(f"Ошибка в значении  {string[0]} за  {data_frame_object.columns[i + 1]} год")
+    
     return found_empty
 
 
