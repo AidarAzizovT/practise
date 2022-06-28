@@ -1,6 +1,4 @@
 import pandas
-import numpy as np  # проверять, что нет неиспользуемых библиотек
-
 
 CORRECT_TITLES = ['ВТП Казани, млн руб.', 'Добавленная стоимость, тыс. руб.',
                   'ДС Обрабатывающие производства, тыс. руб.', 'ДС Строительство, тыс. руб.',
@@ -8,12 +6,8 @@ CORRECT_TITLES = ['ВТП Казани, млн руб.', 'Добавленная
                   'ДС Деятельность в области информатизации и связи, тыс. руб.']
 
 
-# у всех функций добавить типы переменных и тип возвращаемого значения
-def is_titles_ok(data_frame_object: pandas.DataFrame) -> bool: 
+def is_titles_ok(data_frame_object: pandas.DataFrame) -> bool:
     '''
-     + doctest
-    определить конкретно, какие параметры отсутствуют
-
         >>> df = pandas.read_excel('wrong1.xlsx')
         >>> is_titles_ok(df)
         С параметром на 7 строке ошибка
@@ -28,88 +22,64 @@ def is_titles_ok(data_frame_object: pandas.DataFrame) -> bool:
         >>> is_titles_ok(df)
         True
 
-         >>> df = pandas.read_excel('correct2.xlsx')
+        >>> df = pandas.read_excel('correct2.xlsx')
         >>> is_titles_ok(df)
         True
     '''
     foundMistake = False
     counter = 2  # Параметры начинаются со 2 строчке в excel
-    for title in data_frame_object.values:
+    for index_tt, title in enumerate(data_frame_object.values):
         if title[0] not in CORRECT_TITLES:
-            print(f'С параметром на {counter} строке ошибка')
+            print(f'С параметром на {index_tt + 2} строке ошибка')
             foundMistake = True
-        counter += 1
-
-    if foundMistake == False:  # 44-47 строки в одну с один условием
-        return True
-    else:
-        return False
+    return not foundMistake
 
 
-# у всех функций добавить типы переменных и тип возвращаемого значения
-def is_empty(data_frame_object):
-    # + doctest
-    # просто пройтись по всем 3м столбцам начиная со второго
-    # заменить f"Y-{i}" на года
+def is_empty(data_frame_object: pandas.DataFrame) -> bool:
     '''
-        >>> df = pandas.read_excel('wrong2.xlsx')
-        >>> is_empty(df)
-        Ошибка по  4 столбцу 4 строке
-        Ошибка по  3 столбцу 6 строке
-        Ошибка по  2 столбцу 7 строке
-        True
-
-        >>> df = pandas.read_excel('wrong3.xlsx')
-        >>> is_empty(df)
-        Ошибка по  4 столбцу 8 строке
-        True
-
         >>> df = pandas.read_excel('correct1.xlsx')
         >>> is_empty(df)
         False
-    '''
-    foundEmpty = False
-    line = 2 # избавиться от line and row, используя enumerate
-    row = 2
 
-    for string in data_frame_object.values:
-        for element in string[1:]:
-            if pandas.isna(element):
-                foundEmpty = True
-                print(f"Ошибка по  {str(row)} столбцу {str(line)} строке")
-            row += 1
-        row = 2
-        line += 1
-
-    if foundEmpty == True: # 4 строки в одну с один условием
-        return True
-    else:
-        return False
-
-
-# у всех функций добавить типы переменных и тип возвращаемого значения
-def is_everything_ok(file_name):  # переименовать + возвращать bool
-    '''
-        >>> is_everything_ok("correct1.xlsx")
+        >>> df = pandas.read_excel('wrong1.xlsx')
+        >>> is_empty(df)
+        Ошибка в значении  ДС Транспортировка и хранение, тыс. руб. за  Y-3 год
+        Ошибка в значении  ДС Транспортировка и хранение, тыс. руб. за  Y-2 год
         True
+
+        >>> df = pandas.read_excel('wrong2.xlsx')
+        >>> is_empty(df)
+        Ошибка в значении  ДС Обрабатывающие производства, тыс. руб. за  Y-1 год
+        Ошибка в значении  ДС Транспортировка и хранение, тыс. руб. за  Y-2 год
+        Ошибка в значении  ДС Оптовая и розничная торговля, тыс. руб. за  Y-3 год
+        True
+
+    '''
+
+    found_empty = False
+    for string in data_frame_object.values:
+        for el_index, element in enumerate(string[1:]):
+            if pandas.isna(element):
+                found_empty = True
+                print(f"Ошибка в значении  {string[0]} за  {data_frame_object.columns[el_index + 1]} год")
+    return found_empty
+
+
+def is_everything_ok(file_name: pandas.DataFrame) -> bool:
+    '''
+        >>> is_everything_ok("wrong2.xlsx")
+        Ошибка в значении  ДС Обрабатывающие производства, тыс. руб. за  Y-1 год
+        Ошибка в значении  ДС Транспортировка и хранение, тыс. руб. за  Y-2 год
+        Ошибка в значении  ДС Оптовая и розничная торговля, тыс. руб. за  Y-3 год
+        False
 
         >>> is_everything_ok("wrong1.xlsx")
         С параметром на 7 строке ошибка
         False
-
-        >>> is_everything_ok("wrong2.xlsx")
-        Ошибка по  4 столбцу 4 строке
-        Ошибка по  3 столбцу 6 строке
-        Ошибка по  2 столбцу 7 строке
-        False
-
     '''
-
     data_frame_object = pandas.read_excel(file_name)
-    if is_titles_ok(data_frame_object) and not is_empty(data_frame_object): # 4 строки в одну с один условием
-        return True
-    else:
-        return False
+    return is_titles_ok(data_frame_object) and not is_empty(data_frame_object)
+
 
 
 if __name__ == "__main__":
