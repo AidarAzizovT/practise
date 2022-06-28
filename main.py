@@ -6,38 +6,48 @@ CORRECT_TITLES = ['ВТП Казани, млн руб.', 'Добавленная
                   'ДС Деятельность в области информатизации и связи, тыс. руб.']
 
 
-def is_titles_ok(data_frame_object: pandas.DataFrame) -> bool:
+def are_titles_ok(data_frame_object: pandas.DataFrame) -> bool:
     '''
+    This function checks titles, are they correct or not. If there are
+    mistake with it, function returns False and print
+    where  this mistakes are. If everything is correct,
+    function returns True.
+
         >>> df = pandas.read_excel('wrong1.xlsx')
-        >>> is_titles_ok(df)
+        >>> are_titles_ok(df)
         С параметром на 7 строке ошибка
         False
 
         >>> df = pandas.read_excel('wrong3.xlsx')
-        >>> is_titles_ok(df)
+        >>> are_titles_ok(df)
         С параметром на 4 строке ошибка
         False
 
         >>> df = pandas.read_excel('correct1.xlsx')
-        >>> is_titles_ok(df)
+        >>> are_titles_ok(df)
         True
 
         >>> df = pandas.read_excel('correct2.xlsx')
-        >>> is_titles_ok(df)
+        >>> are_titles_ok(df)
         True
     '''
-    foundMistake = False
-    counter = 2  # Параметры начинаются со 2 строчке в excel TO delete
+    found_mistake = False
+
     for index_tt, title in enumerate(data_frame_object.values): # user one letter for index, for example, i
         if title[0] not in CORRECT_TITLES:
             print(f'С параметром на {index_tt + 2} строке ошибка')
-            foundMistake = True
-    return not foundMistake
+            found_mistake = True
+
+    return not found_mistake
 
 
 def is_empty(data_frame_object: pandas.DataFrame) -> bool:
     '''
-        Проверка на отсутствие данных
+        Function checks filling of DF object, if there
+        are missing data, function returns True and print
+        where this mistake are. Else, if there aren't
+        any problems, function returns False.
+
 
         >>> df = pandas.read_excel('correct1.xlsx')
         >>> is_empty(df)
@@ -70,6 +80,11 @@ def is_empty(data_frame_object: pandas.DataFrame) -> bool:
 
 def is_everything_ok(file_name: pandas.DataFrame) -> bool:
     '''
+    Function unites 2 above created functions. We need to check,
+    is data correct or not. For that, we check are
+    here any problems with titles or missing data.
+    Returns True, if everything is correct, else returns False.
+
         >>> is_everything_ok("wrong2.xlsx")
         Ошибка в значении  ДС Обрабатывающие производства, тыс. руб. за  Y-1 год
         Ошибка в значении  ДС Транспортировка и хранение, тыс. руб. за  Y-2 год
@@ -81,7 +96,7 @@ def is_everything_ok(file_name: pandas.DataFrame) -> bool:
         False
     '''
     data_frame_object = pandas.read_excel(file_name)
-    return is_titles_ok(data_frame_object) and not is_empty(data_frame_object)
+    return are_titles_ok(data_frame_object) and not is_empty(data_frame_object)
 
 
 
