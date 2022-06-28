@@ -1,6 +1,5 @@
 import pandas
-import numpy as np
-
+import numpy as np  # проверять, что нет неиспользуемых библиотек
 
 
 CORRECT_TITLES = ['ВТП Казани, млн руб.', 'Добавленная стоимость, тыс. руб.',
@@ -8,7 +7,9 @@ CORRECT_TITLES = ['ВТП Казани, млн руб.', 'Добавленная
                   'ДС Транспортировка и хранение, тыс. руб.', 'ДС Оптовая и розничная торговля, тыс. руб.',
                   'ДС Деятельность в области информатизации и связи, тыс. руб.']
 
-def is_titles_ok(data_frame_object):
+
+# у всех функций добавить типы переменных и тип возвращаемого значения
+def is_titles_ok(data_frame_object: pandas.DataFrame) -> bool: 
     '''
      + doctest
     определить конкретно, какие параметры отсутствуют
@@ -30,29 +31,26 @@ def is_titles_ok(data_frame_object):
          >>> df = pandas.read_excel('correct2.xlsx')
         >>> is_titles_ok(df)
         True
-
-
     '''
     foundMistake = False
-    counter = 2 #Параметры начинаются со 2 строчке в excel
+    counter = 2  # Параметры начинаются со 2 строчке в excel
     for title in data_frame_object.values:
         if title[0] not in CORRECT_TITLES:
             print(f'С параметром на {counter} строке ошибка')
             foundMistake = True
         counter += 1
 
-    if foundMistake == False:
+    if foundMistake == False:  # 44-47 строки в одну с один условием
         return True
     else:
         return False
 
 
-
+# у всех функций добавить типы переменных и тип возвращаемого значения
 def is_empty(data_frame_object):
     # + doctest
     # просто пройтись по всем 3м столбцам начиная со второго
     # заменить f"Y-{i}" на года
-
     '''
         >>> df = pandas.read_excel('wrong2.xlsx')
         >>> is_empty(df)
@@ -70,9 +68,8 @@ def is_empty(data_frame_object):
         >>> is_empty(df)
         False
     '''
-
     foundEmpty = False
-    line = 2
+    line = 2 # избавиться от line and row, используя enumerate
     row = 2
 
     for string in data_frame_object.values:
@@ -84,17 +81,14 @@ def is_empty(data_frame_object):
         row = 2
         line += 1
 
-    if foundEmpty == True:
+    if foundEmpty == True: # 4 строки в одну с один условием
         return True
     else:
         return False
 
 
-
-
-
-
-def is_everything_ok(file_name): # переименовать + возвращать bool
+# у всех функций добавить типы переменных и тип возвращаемого значения
+def is_everything_ok(file_name):  # переименовать + возвращать bool
     '''
         >>> is_everything_ok("correct1.xlsx")
         True
@@ -112,19 +106,12 @@ def is_everything_ok(file_name): # переименовать + возвраща
     '''
 
     data_frame_object = pandas.read_excel(file_name)
-    if is_titles_ok(data_frame_object) and not is_empty(data_frame_object):
+    if is_titles_ok(data_frame_object) and not is_empty(data_frame_object): # 4 строки в одну с один условием
         return True
     else:
         return False
 
 
-
-
 if __name__ == "__main__":
     import doctest
     doctest.testmod()
-
-
-
-
-
